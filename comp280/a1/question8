@@ -1,0 +1,73 @@
+#!/bin/sh
+#Matthew Shirlaw. Comp280 Assignment 1. Question 8
+#This script accepts a command argument in bytes. It then matches all files which are 
+#smaller than the given size and which were modified on the 15th day of any month. These
+#files are then stored in a file called "out" and the file which was modified most recently 
+#is written to stdout
+#*******************************************************************************************
+
+#First test to see if the correct no. of arguments has been used
+if [ $# != 1 ]
+then
+	echo "Usage: question8 file_size"
+	exit
+fi
+
+#Test to see if an integer argument was passed in
+#redirect stderr to the null device 
+if !([ $1 -gt 0 ] 2> /dev/null)
+then
+	echo "Error: arg1 must be of type int"
+   	echo "Usage: question8 file_size"
+	exit
+fi
+
+#Set maxSize equal to the command line argument (size in bytes) 
+maxSize=$1
+#initialise a counter
+count=0
+
+#Generate a list of all files in the current directory sorted with the most recent at the top. 
+#Store this information in a file called allFiles
+ls -lt | grep : > allFiles
+
+#Loop through each line in allFiles and read filename, size and modDate 
+(while IFS=" " read -r f1 f2 f3 f4 f5 f6 f7 f8 f9
+do
+	filename=$f9
+	size=$f5
+	modDate=$f7
+	
+	#ensure the file is less than the max number of bytes
+	if [ $size -lt $maxSize ]
+	then 
+		#only display files modified on the 15th day
+		if [ $modDate -eq 15 ]
+		then
+			#ignore the file in use
+			if [ $filename != "allFiles" ]
+			then
+				count=`expr $count + 1` 
+				(echo $count $filename ) >> out
+
+			fi
+		fi
+	fi
+done 
+) < allFiles
+
+#clean up
+rm allFiles
+
+#Test if the out file is nonzero
+if [ -s out ]
+then
+	#output the file which was modified most recently
+	(cat | grep "1 ") < out
+	
+	#cleanup
+	rm out
+else
+	echo "Error: No matching files were found"
+fi
+
