@@ -1,5 +1,5 @@
 #!/bin/sh
-#Matthew Shirlaw. Comp280 Assignment 1. Question 8
+#mshirlaw
 #This script accepts a command argument in bytes. It then matches all files which are 
 #smaller than the given size and which were modified on the 15th day of any month. These
 #files are then stored in a file called "out" and the file which was modified most recently 
