@@ -6,7 +6,7 @@
 * Output: Equivalent resistance (Ohms), electrical current (Amps),
 * power dissipated (Watts) and voltage (Volts).
 * 
-* Program written by mhirlaw
+* Program written by mshirlaw
 **************************************************************************/
 import java.util.Scanner;
 
